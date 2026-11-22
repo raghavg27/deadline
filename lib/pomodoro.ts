@@ -20,7 +20,9 @@ export function initialTimer(): TimerState {
 }
 
 export function remainingMs(t: TimerState, now: number): number {
-  return t.running && t.endsAt !== null ? Math.max(0, t.endsAt - now) : t.remainingMs;
+  if (!t.running || t.endsAt === null) return t.remainingMs;
+  // Never show more than the time left at start, even if `now` is a little behind.
+  return Math.min(t.remainingMs, Math.max(0, t.endsAt - now));
 }
 
 export function start(t: TimerState, now: number): TimerState {

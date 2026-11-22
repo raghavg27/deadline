@@ -10,9 +10,8 @@ export function unlockAudio(): void {
   }
 }
 
-/** A short two-note chime made with the Web Audio API. */
+/** A short two-note chime made with the Web Audio API. Silent until a click has unlocked audio. */
 export function beep(): void {
-  unlockAudio();
   if (!ctx) return;
   const t0 = ctx.currentTime;
   [880, 1320].forEach((freq, i) => {

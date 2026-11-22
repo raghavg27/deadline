@@ -32,6 +32,11 @@ describe("pomodoro", () => {
     expect(remainingMs(timer, 57 * MIN)).toBe(DURATIONS.short - 2 * MIN);
   });
 
+  it("never shows more than the full time when the clock reads a little early", () => {
+    const t = start(initialTimer(), 1_500);
+    expect(remainingMs(t, 1_000)).toBe(DURATIONS.work);
+  });
+
   it("formats the clock", () => {
     expect(formatClock(25 * MIN)).toBe("25:00");
     expect(formatClock(61_500)).toBe("01:02");
