@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Deadline
 
-## Getting Started
+Deadline is a single-page app. It tracks an 8-day system design interview plan.
 
-First, run the development server:
+The interview date is 30 November 2026. All dates use India Standard Time (IST).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- A flip-board countdown that shows the time to the interview. It changes each second.
+- A progress bar. It shows the milestones that are done and the planned hours that are done.
+- A timeline of the 9 plan days. Today is highlighted. A past day that is not done shows "Missed".
+- A Pomodoro timer: 25 minutes of work, 5 minutes of break, and 15 minutes of break after 4 rounds.
+- A cheat sheet with the 7 steps of the design framework.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The app keeps all data in the browser (localStorage). It has no server and no account.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Run the app
 
-## Learn More
+You must have Node.js 20.19 or a later version.
 
-To learn more about Next.js, take a look at the following resources:
+1. Install the packages:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   npm install
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Start the development server:
 
-## Deploy on Vercel
+   ```bash
+   npm run dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. Open http://localhost:3000 in your browser.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Commands
+
+| Command         | Result                                  |
+| --------------- | --------------------------------------- |
+| `npm run dev`   | Starts the development server.          |
+| `npm run build` | Makes a production build.               |
+| `npm start`     | Starts the production build.            |
+| `npm run lint`  | Examines the code with ESLint.          |
+| `npm test`      | Runs the unit tests with Vitest.        |
+
+## Change the plan
+
+The plan data is in `lib/plan.ts`.
+
+The countdown stops at `interviewStart`. The default value is 00:00 IST on 30 November. If you know the time of your interview, change this value.
+
+## Files
+
+| File                  | Contents                                          |
+| --------------------- | ------------------------------------------------- |
+| `lib/plan.ts`         | The plan days, session steps and framework steps. |
+| `lib/dates.ts`        | Date functions that use IST.                      |
+| `lib/pomodoro.ts`     | Timer functions.                                  |
+| `lib/storage.ts`      | Read and write of the saved data.                 |
+| `lib/beep.ts`         | The sound at the end of each timer phase.         |
+| `components/`         | The parts of the page.                            |
+
+## Note about sound
+
+Browsers do not play sound before you click on the page. If you reload the page while the timer runs, click one time on the page to turn on the sound again.
