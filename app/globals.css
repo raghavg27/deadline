@@ -1,26 +1,226 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --bg: #eef2f7;
+  --surface: #ffffff;
+  --surface-2: #f4f7fb;
+  --ink: #142033;
+  --muted: #5b6880;
+  --line: #d9e0ea;
+  --focus: #6352e0;
+  --focus-soft: #ece9ff;
+  --go: #0f9e6e;
+  --go-soft: #dcf5eb;
+  --warn: #9a5b00;
+  --warn-soft: #fff0d1;
+  --grid: rgba(20, 32, 51, 0.08);
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* The flip board is a physical object, so it stays dark in both modes. */
+  --board: #121c2e;
+  --tile: #1d283c;
+  --tile-ink: #f3f0e6;
+  --board-focus: #a99dff;
+  --board-go: #3ddc97;
+
+  --sh-panel: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 1px 2px rgba(20, 32, 51, 0.06),
+    0 14px 30px -16px rgba(20, 32, 51, 0.22);
+  --sh-lift: 0 2px 4px rgba(20, 32, 51, 0.06), 0 26px 50px -22px rgba(20, 32, 51, 0.38);
+  --sh-board: 0 1px 0 rgba(255, 255, 255, 0.07) inset, 0 -2px 0 rgba(0, 0, 0, 0.35) inset,
+    0 50px 90px -45px rgba(18, 28, 46, 0.75), 0 20px 34px -20px rgba(18, 28, 46, 0.55);
+  --sh-today: 0 0 0 1.5px var(--focus), 0 20px 44px -20px color-mix(in oklab, var(--focus) 75%, transparent);
+  --sh-tile: 0 1px 0 rgba(255, 255, 255, 0.08) inset, 0 8px 14px -6px rgba(0, 0, 0, 0.6);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg: #0e1626;
+    --surface: #152034;
+    --surface-2: #1a273e;
+    --ink: #e8edf6;
+    --muted: #94a2ba;
+    --line: #26354e;
+    --focus: #9b8cff;
+    --focus-soft: rgba(155, 140, 255, 0.15);
+    --go: #3ddc97;
+    --go-soft: rgba(61, 220, 151, 0.13);
+    --warn: #f5a524;
+    --warn-soft: rgba(245, 165, 36, 0.14);
+    --grid: rgba(232, 237, 246, 0.06);
+    --board: #0a1220;
+    --tile: #1a2539;
+
+    --sh-panel: 0 1px 0 rgba(255, 255, 255, 0.045) inset, 0 18px 38px -20px rgba(0, 0, 0, 0.75);
+    --sh-lift: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 30px 60px -26px rgba(0, 0, 0, 0.9);
+    --sh-board: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 50px 90px -45px rgba(0, 0, 0, 0.95);
   }
 }
 
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-focus: var(--focus);
+  --color-focus-soft: var(--focus-soft);
+  --color-go: var(--go);
+  --color-go-soft: var(--go-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-board: var(--board);
+  --color-tile: var(--tile);
+  --color-tile-ink: var(--tile-ink);
+  --color-board-focus: var(--board-focus);
+  --color-board-go: var(--board-go);
+
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display-face);
+
+  --shadow-panel: var(--sh-panel);
+  --shadow-lift: var(--sh-lift);
+  --shadow-board: var(--sh-board);
+  --shadow-today: var(--sh-today);
+  --shadow-tile: var(--sh-tile);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg);
+  background-image: radial-gradient(var(--grid) 1px, transparent 1px);
+  background-size: 22px 22px;
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@utility panel {
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: var(--sh-panel);
+}
+
+@utility field {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background-color: var(--surface-2);
+  padding: 10px 12px;
+  font-size: 16px;
+  color: var(--ink);
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &::placeholder {
+    color: var(--muted);
+    opacity: 0.8;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--focus);
+    box-shadow: 0 0 0 4px var(--focus-soft);
+  }
+}
+
+/* Split-flap digit */
+.flip {
+  --w: clamp(28px, 8.4vw, 60px);
+  position: relative;
+  display: inline-block;
+  width: var(--w);
+  height: calc(var(--w) * 1.42);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: calc(var(--w) * 1.12);
+  line-height: 1;
+  color: var(--tile-ink);
+  perspective: 300px;
+  border-radius: 7px;
+  box-shadow: var(--sh-tile);
+}
+
+.flip::after {
+  /* The hinge line across the middle of the tile */
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 5;
+}
+
+.flip-half {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+
+.flip-half > span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 200%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flip-top {
+  top: 0;
+  border-radius: 7px 7px 0 0;
+  transform-origin: bottom;
+  background: color-mix(in oklab, var(--tile) 90%, white);
+}
+
+.flip-top > span {
+  top: 0;
+}
+
+.flip-bottom {
+  bottom: 0;
+  border-radius: 0 0 7px 7px;
+  transform-origin: top;
+  background: var(--tile);
+}
+
+.flip-bottom > span {
+  bottom: 0;
+}
+
+.flip-anim-top {
+  animation: flip-top 0.24s ease-in forwards;
+}
+
+.flip-anim-bottom {
+  animation: flip-bottom 0.24s 0.24s ease-out both;
+}
+
+@keyframes flip-top {
+  to {
+    transform: rotateX(-90deg);
+  }
+}
+
+@keyframes flip-bottom {
+  from {
+    transform: rotateX(90deg);
+  }
+  to {
+    transform: rotateX(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flip-anim-top,
+  .flip-anim-bottom,
+  .flip-old {
+    display: none;
+  }
 }

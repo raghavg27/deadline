@@ -42,3 +42,6 @@ next-env.d.ts
 
 # local notes
 CLAUDE.local.md
+
+# browser test screenshots
+.playwright-mcp/
